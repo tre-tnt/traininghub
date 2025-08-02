@@ -3,1843 +3,727 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TNT Growth | Command Center</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <title>TNT Growth Academy - Enterprise Training Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --tnt-dark-blue: #0f1b4c;
-            --tnt-pink: #ff006B;
-            --tnt-light-gray: #f8fafc;
-            --tnt-border-gray: #e2e8f0;
-            --tnt-text-primary: #1e293b;
-            --tnt-text-secondary: #64748b;
+            --tnt-primary: #0ea5e9;
+            --tnt-secondary: #f59e0b;
+            --tnt-accent: #ec4899;
+            --tnt-success: #10b981;
+            --tnt-warning: #f59e0b;
+            --tnt-danger: #ef4444;
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--tnt-light-gray); color: var(--tnt-text-primary); }
-        .sidebar-link.active { background-color: #f1f5f9; color: var(--tnt-pink); font-weight: 600; }
-        .tnt-button { background-color: var(--tnt-pink); color: white; }
-        .tnt-button:hover { background-color: #d6005b; }
-        .modal-overlay { background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); z-index: 1000; }
-        .progress-bar-fill { background-color: var(--tnt-pink); }
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .content-card { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .enterprise-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .enterprise-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.35s;
+        }
+        
+        .resource-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--tnt-primary), var(--tnt-accent));
+        }
+        
+        .quick-actions {
+            background: linear-gradient(135deg, var(--tnt-primary), var(--tnt-accent));
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-active { background-color: var(--tnt-success); }
+        .status-pending { background-color: var(--tnt-warning); }
+        .status-inactive { background-color: var(--tnt-danger); }
+        
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--tnt-danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .breadcrumb a {
+            color: var(--tnt-primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .learning-path {
+            position: relative;
+        }
+        
+        .learning-path::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        
+        .learning-step {
+            position: relative;
+            padding-left: 50px;
+        }
+        
+        .learning-step::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--tnt-primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #e2e8f0;
+        }
+        
+        .learning-step.completed::before {
+            background: var(--tnt-success);
+        }
+        
+        .learning-step.current::before {
+            background: var(--tnt-warning);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .department-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .smart-search {
+            position: relative;
+        }
+        
+        .smart-search input {
+            padding-left: 48px;
+        }
+        
+        .smart-search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+        
+        .filters-bar {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            background: #f1f5f9;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #475569;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-chip:hover {
+            background: var(--tnt-primary);
+            color: white;
+        }
+        
+        .filter-chip.active {
+            background: var(--tnt-primary);
+            color: white;
+        }
+        
+        .notification-toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            min-width: 300px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+        
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
-<body class="bg-slate-50">
-
-    <div class="flex h-screen bg-white">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 bg-white border-r border-[var(--tnt-border-gray)] flex flex-col">
-            <div class="p-6 text-center border-b border-[var(--tnt-border-gray)]">
-                <div class="w-16 h-16 bg-gradient-to-br from-sky-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg mx-auto">
-                    <span class="text-white font-bold text-xl">TNT</span>
-                </div>
-            </div>
-            <div class="p-4">
-                <div class="relative mb-4">
-                    <span data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></span>
-                    <input type="text" id="global-search" placeholder="Search all resources..." class="w-full bg-slate-100 border border-slate-200 rounded-md pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                </div>
-                <!-- Add New Resource Button -->
-                <button id="add-resource-btn" class="w-full bg-[var(--tnt-pink)] text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-[#d6005b] transition-colors flex items-center justify-center">
-                    <span data-lucide="plus" class="w-4 h-4 mr-2"></span>
-                    Add New Resource
-                </button>
-            </div>
-            <nav id="main-nav" class="flex-grow p-4 space-y-2">
-                <!-- Navigation Links will be injected by JS -->
-            </nav>
-            <div id="user-profile" class="p-4 border-t border-[var(--tnt-border-gray)]">
-                <!-- User Profile will be injected by JS -->
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main id="main-content" class="flex-1 overflow-y-auto p-6 md:p-10">
-            <!-- Content will be injected by JS -->
-        </main>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal-overlay hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Login to TNT Academy</h2>
-                <button class="close-modal-btn text-slate-400 hover:text-slate-600" data-modal-id="login-modal">
-                    <span data-lucide="x" class="w-6 h-6"></span>
-                </button>
-            </div>
-            <form id="login-form" class="space-y-4">
-                <div>
-                    <label for="login-email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                    <input type="email" id="login-email" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                </div>
-                <div>
-                    <label for="login-password" class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                    <input type="password" id="login-password" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                </div>
-                <button type="submit" class="w-full bg-[var(--tnt-pink)] text-white py-3 px-4 rounded-md font-medium hover:bg-[#d6005b] transition-colors">
-                    Login
-                </button>
-            </form>
-            <div class="mt-4 text-center">
-                <p class="text-sm text-slate-500">Don't have an account? Contact your administrator.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Resource Modal -->
-    <div id="add-resource-modal" class="modal-overlay hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Add New Resource</h2>
-                <button class="close-modal-btn text-slate-400 hover:text-slate-600" data-modal-id="add-resource-modal">
-                    <span data-lucide="x" class="w-6 h-6"></span>
-                </button>
-            </div>
-            <form id="add-resource-form" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="resource-title" class="block text-sm font-medium text-slate-700 mb-1">Title *</label>
-                        <input type="text" id="resource-title" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="resource-type" class="block text-sm font-medium text-slate-700 mb-1">Type *</label>
-                        <select id="resource-type" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="">Select Type</option>
-                            <option value="Training">Training Video</option>
-                            <option value="SOP">Standard Operating Procedure</option>
-                            <option value="Template">Template/Form</option>
-                            <option value="Resource">Resource/Guide</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="resource-department" class="block text-sm font-medium text-slate-700 mb-1">Department *</label>
-                        <select id="resource-department" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="">Select Department</option>
-                            <option value="Analytics">Analytics</option>
-                            <option value="Creative">Creative</option>
-                            <option value="Growth">Growth</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="resource-author" class="block text-sm font-medium text-slate-700 mb-1">Added By *</label>
-                        <input type="text" id="resource-author" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                </div>
-                <div>
-                    <label for="resource-url" class="block text-sm font-medium text-slate-700 mb-1">URL/Link *</label>
-                    <input type="url" id="resource-url" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent" placeholder="https://...">
-                </div>
-                <div>
-                    <label for="resource-description" class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                    <textarea id="resource-description" rows="3" class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent" placeholder="Brief description of the resource..."></textarea>
-                </div>
-                <div>
-                    <label for="resource-skills" class="block text-sm font-medium text-slate-700 mb-1">Skills Covered (comma-separated)</label>
-                    <input type="text" id="resource-skills" class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent" placeholder="e.g., Google Ads, Conversion Tracking, Analytics">
-                </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" class="close-modal-btn px-4 py-2 text-slate-600 border border-slate-300 rounded-md hover:bg-slate-50" data-modal-id="add-resource-modal">Cancel</button>
-                    <button type="submit" class="bg-[var(--tnt-pink)] text-white px-6 py-2 rounded-md font-medium hover:bg-[#d6005b] transition-colors">Add Resource</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Admin Dashboard Modal -->
-    <div id="admin-modal" class="modal-overlay hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Admin Dashboard</h2>
-                <button class="close-modal-btn text-slate-400 hover:text-slate-600" data-modal-id="admin-modal">
-                    <span data-lucide="x" class="w-6 h-6"></span>
-                </button>
-            </div>
-            <div id="admin-content">
-                <!-- Admin content will be injected by JS -->
-            </div>
-        </div>
-    </div>
-
-        <!-- Add Member Modal -->
-    <div id="add-member-modal" class="modal-overlay hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Add New Member</h2>
-                <button class="close-modal-btn text-slate-400 hover:text-slate-600" data-modal-id="add-member-modal">
-                    <span data-lucide="x" class="w-6 h-6"></span>
-                                </button>
-                            </div>
-            <form id="add-member-form" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="member-name" class="block text-sm font-medium text-slate-700 mb-1">Full Name *</label>
-                        <input type="text" id="member-name" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
+<body class="min-h-screen">
+    <!-- Enterprise Header -->
+    <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-sky-500 to-pink-500 rounded-lg flex items-center justify-center shadow-md">
+                            <span class="text-white font-bold text-sm">TNT</span>
                         </div>
-                    <div>
-                        <label for="member-email" class="block text-sm font-medium text-slate-700 mb-1">Email *</label>
-                        <input type="email" id="member-email" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
+                        <div>
+                            <h1 class="text-xl font-bold text-slate-900">TNT Growth Academy</h1>
+                            <p class="text-sm text-slate-600">Enterprise Knowledge Platform</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Breadcrumb Navigation -->
+                    <nav class="breadcrumb" id="breadcrumb">
+                        <a href="#" data-section="dashboard">Dashboard</a>
+                        <span data-lucide="chevron-right" class="w-4 h-4"></span>
+                        <span id="current-section">Overview</span>
+                    </nav>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Quick Actions -->
+                    <div class="flex space-x-2">
+                        <button class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors flex items-center">
+                            <span data-lucide="plus" class="w-4 h-4 mr-2"></span>
+                            Quick Add
+                        </button>
+                        <button class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors flex items-center">
+                            <span data-lucide="download" class="w-4 h-4 mr-2"></span>
+                            Export
+                        </button>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="flex items-center space-x-3">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-slate-900" id="user-name">Welcome, Team Member</p>
+                            <p class="text-xs text-slate-500" id="user-role">Role: Loading...</p>
+                        </div>
+                        <div class="relative">
+                            <button class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center hover:bg-slate-300 transition-colors">
+                                <span data-lucide="user" class="w-4 h-4"></span>
+                            </button>
+                            <div class="notification-badge">3</div>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="member-title" class="block text-sm font-medium text-slate-700 mb-1">Job Title *</label>
-                        <input type="text" id="member-title" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="member-department" class="block text-sm font-medium text-slate-700 mb-1">Department *</label>
-                        <select id="member-department" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="">Select Department</option>
-                            <option value="Analytics">Analytics</option>
-                            <option value="Creative">Creative</option>
-                            <option value="Growth">Growth</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="member-password" class="block text-sm font-medium text-slate-700 mb-1">Initial Password *</label>
-                        <input type="password" id="member-password" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent" placeholder="Minimum 8 characters">
-                    </div>
-                    <div>
-                        <label for="member-role" class="block text-sm font-medium text-slate-700 mb-1">Role *</label>
-                        <select id="member-role" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="user">Team Member</option>
-                            <option value="admin">Administrator</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" class="close-modal-btn px-4 py-2 text-slate-600 border border-slate-300 rounded-md hover:bg-slate-50" data-modal-id="add-member-modal">Cancel</button>
-                    <button type="submit" class="bg-[var(--tnt-pink)] text-white px-6 py-2 rounded-md font-medium hover:bg-[#d6005b] transition-colors">Add Member</button>
-                </div>
-            </form>
+            </div>
         </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Smart Search & Filters -->
+        <div class="mb-8">
+            <div class="smart-search mb-4">
+                <span data-lucide="search" class="smart-search-icon w-5 h-5"></span>
+                <input type="text" id="smart-search" placeholder="Search resources, departments, or skills..." 
+                       class="w-full pl-12 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all">
+            </div>
+            
+            <div class="filters-bar">
+                <div class="flex flex-wrap items-center justify-between">
+                    <div class="flex flex-wrap">
+                        <span class="text-sm font-medium text-slate-700 mr-3">Filter by:</span>
+                        <div class="filter-chip active" data-filter="all">All Resources</div>
+                        <div class="filter-chip" data-filter="video">Videos</div>
+                        <div class="filter-chip" data-filter="sop">SOPs</div>
+                        <div class="filter-chip" data-filter="template">Templates</div>
+                        <div class="filter-chip" data-filter="resource">Resources</div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-slate-600">Sort by:</span>
+                        <select class="text-sm border border-slate-300 rounded px-2 py-1">
+                            <option>Most Recent</option>
+                            <option>Alphabetical</option>
+                            <option>Most Popular</option>
+                            <option>Department</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Overview -->
+        <div id="dashboard-section" class="space-y-8">
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="metric-card rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-600">Total Resources</p>
+                            <p class="text-3xl font-bold text-slate-900">248</p>
+                            <p class="text-sm text-slate-500">+12 this month</p>
+                        </div>
+                        <div class="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center">
+                            <span data-lucide="folder" class="w-6 h-6 text-sky-600"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-600">Active Learners</p>
+                            <p class="text-3xl font-bold text-slate-900">47</p>
+                            <p class="text-sm text-slate-500">+5 this week</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <span data-lucide="users" class="w-6 h-6 text-green-600"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-600">Completion Rate</p>
+                            <p class="text-3xl font-bold text-slate-900">89%</p>
+                            <p class="text-sm text-slate-500">+3% vs last month</p>
+                        </div>
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <span data-lucide="trending-up" class="w-6 h-6 text-orange-600"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-600">Avg. Time to Complete</p>
+                            <p class="text-3xl font-bold text-slate-900">2.4h</p>
+                            <p class="text-sm text-slate-500">-0.3h vs last month</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <span data-lucide="clock" class="w-6 h-6 text-purple-600"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Department Overview -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Analytics Department -->
+                <div class="enterprise-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-slate-900">Analytics</h3>
+                        <span class="status-indicator status-active"></span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Resources</span>
+                            <span class="font-medium">15</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Active Learners</span>
+                            <span class="font-medium">12</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Avg. Completion</span>
+                            <span class="font-medium">92%</span>
+                        </div>
+                        <button class="w-full bg-slate-100 text-slate-700 py-2 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors">
+                            View Department
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Creative Department -->
+                <div class="enterprise-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-slate-900">Creative</h3>
+                        <span class="status-indicator status-active"></span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Resources</span>
+                            <span class="font-medium">8</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Active Learners</span>
+                            <span class="font-medium">9</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Avg. Completion</span>
+                            <span class="font-medium">87%</span>
+                        </div>
+                        <button class="w-full bg-slate-100 text-slate-700 py-2 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors">
+                            View Department
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Growth Department -->
+                <div class="enterprise-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-slate-900">Growth</h3>
+                        <span class="status-indicator status-active"></span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Resources</span>
+                            <span class="font-medium">25</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Active Learners</span>
+                            <span class="font-medium">18</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600">Avg. Completion</span>
+                            <span class="font-medium">94%</span>
+                        </div>
+                        <button class="w-full bg-slate-100 text-slate-700 py-2 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors">
+                            View Department
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Quick Actions -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Recent Activity -->
+                <div class="enterprise-card p-6">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-4">Recent Activity</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center">
+                                <span data-lucide="play" class="w-4 h-4 text-sky-600"></span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-slate-900">New video added: "Meta Ads Optimization"</p>
+                                <p class="text-xs text-slate-500">2 hours ago by Tim Walton</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                <span data-lucide="file-text" class="w-4 h-4 text-green-600"></span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-slate-900">SOP updated: "Funnel Setup Process"</p>
+                                <p class="text-xs text-slate-500">4 hours ago by Billy Herrera-Arcia</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                <span data-lucide="users" class="w-4 h-4 text-orange-600"></span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-slate-900">New team member completed onboarding</p>
+                                <p class="text-xs text-slate-500">6 hours ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="enterprise-card p-6">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <button class="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white py-3 px-4 rounded-lg font-medium hover:from-sky-600 hover:to-sky-700 transition-all flex items-center justify-center">
+                            <span data-lucide="plus" class="w-5 h-5 mr-2"></span>
+                            Add New Resource
+                        </button>
+                        
+                        <button class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-4 rounded-lg font-medium hover:from-green-600 hover:to-green-700 transition-all flex items-center justify-center">
+                            <span data-lucide="users" class="w-5 h-5 mr-2"></span>
+                            Invite Team Member
+                        </button>
+                        
+                        <button class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-purple-600 hover:to-purple-700 transition-all flex items-center justify-center">
+                            <span data-lucide="bar-chart-3" class="w-5 h-5 mr-2"></span>
+                            View Analytics
+                        </button>
+                        
+                        <button class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all flex items-center justify-center">
+                            <span data-lucide="settings" class="w-5 h-5 mr-2"></span>
+                            Platform Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Action Button -->
+    <div class="floating-action">
+        <button class="w-14 h-14 bg-gradient-to-r from-sky-500 to-pink-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
+            <span data-lucide="plus" class="w-6 h-6"></span>
+        </button>
     </div>
 
-    <!-- Edit Member Modal -->
-    <div id="edit-member-modal" class="modal-overlay hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Edit Member</h2>
-                <button class="close-modal-btn text-slate-400 hover:text-slate-600" data-modal-id="edit-member-modal">
-                    <span data-lucide="x" class="w-6 h-6"></span>
-                </button>
+    <!-- Notification Toast -->
+    <div id="notification-toast" class="notification-toast">
+        <div class="flex items-start space-x-3">
+            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <span data-lucide="check" class="w-4 h-4 text-green-600"></span>
             </div>
-            <form id="edit-member-form" class="space-y-4">
-                <input type="hidden" id="edit-member-id">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="edit-member-name" class="block text-sm font-medium text-slate-700 mb-1">Full Name *</label>
-                        <input type="text" id="edit-member-name" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="edit-member-email" class="block text-sm font-medium text-slate-700 mb-1">Email *</label>
-                        <input type="email" id="edit-member-email" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="edit-member-title" class="block text-sm font-medium text-slate-700 mb-1">Job Title *</label>
-                        <input type="text" id="edit-member-title" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="edit-member-department" class="block text-sm font-medium text-slate-700 mb-1">Department *</label>
-                        <select id="edit-member-department" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="">Select Department</option>
-                            <option value="Analytics">Analytics</option>
-                            <option value="Creative">Creative</option>
-                            <option value="Growth">Growth</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="edit-member-role" class="block text-sm font-medium text-slate-700 mb-1">Role *</label>
-                        <select id="edit-member-role" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="user">Team Member</option>
-                            <option value="admin">Administrator</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="edit-member-access" class="block text-sm font-medium text-slate-700 mb-1">Access Level *</label>
-                        <select id="edit-member-access" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="standard">Standard Access</option>
-                            <option value="admin">Admin Access</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label for="edit-member-status" class="block text-sm font-medium text-slate-700 mb-1">Status *</label>
-                    <select id="edit-member-status" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" class="close-modal-btn px-4 py-2 text-slate-600 border border-slate-300 rounded-md hover:bg-slate-50" data-modal-id="edit-member-modal">Cancel</button>
-                    <button type="submit" class="bg-[var(--tnt-pink)] text-white px-6 py-2 rounded-md font-medium hover:bg-[#d6005b] transition-colors">Update Member</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Curriculum Step Modal -->
-    <div id="add-curriculum-step-modal" class="modal-overlay hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Add New Curriculum Step</h2>
-                <button class="close-modal-btn text-slate-400 hover:text-slate-600" data-modal-id="add-curriculum-step-modal">
-                    <span data-lucide="x" class="w-6 h-6"></span>
-                </button>
+            <div class="flex-1">
+                <p class="text-sm font-medium text-slate-900">Resource added successfully</p>
+                <p class="text-xs text-slate-500">The new training video has been added to the Analytics department.</p>
             </div>
-            <form id="add-curriculum-step-form" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="curriculum-title" class="block text-sm font-medium text-slate-700 mb-1">Title *</label>
-                        <input type="text" id="curriculum-title" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="curriculum-type" class="block text-sm font-medium text-slate-700 mb-1">File Type *</label>
-                        <select id="curriculum-type" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="">Select Type</option>
-                            <option value="Training">Training Video</option>
-                            <option value="SOP">Standard Operating Procedure</option>
-                            <option value="Template">Template/Form</option>
-                            <option value="Resource">Resource/Guide</option>
-                            <option value="Vision">Vision Document</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="curriculum-department" class="block text-sm font-medium text-slate-700 mb-1">Department *</label>
-                        <select id="curriculum-department" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                            <option value="">Select Department</option>
-                            <option value="Analytics">Analytics</option>
-                            <option value="Creative">Creative</option>
-                            <option value="Growth">Growth</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="curriculum-author" class="block text-sm font-medium text-slate-700 mb-1">Added By *</label>
-                        <input type="text" id="curriculum-author" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent">
-                    </div>
-                </div>
-                <div>
-                    <label for="curriculum-url" class="block text-sm font-medium text-slate-700 mb-1">URL/Link *</label>
-                    <input type="url" id="curriculum-url" required class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent" placeholder="https://...">
-                    <p class="text-xs text-slate-500 mt-1">For YouTube videos, we'll automatically pull the thumbnail</p>
-                </div>
-                <div>
-                    <label for="curriculum-description" class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                    <textarea id="curriculum-description" rows="3" class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent" placeholder="Brief description of the resource..."></textarea>
-                </div>
-                <div>
-                    <label for="curriculum-skills" class="block text-sm font-medium text-slate-700 mb-1">Skills Covered (comma-separated)</label>
-                    <input type="text" id="curriculum-skills" class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-[var(--tnt-pink)] focus:border-transparent" placeholder="e.g., Google Ads, Conversion Tracking, Analytics">
-                </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" class="close-modal-btn px-4 py-2 text-slate-600 border border-slate-300 rounded-md hover:bg-slate-50" data-modal-id="add-curriculum-step-modal">Cancel</button>
-                    <button type="submit" class="bg-[var(--tnt-pink)] text-white px-6 py-2 rounded-md font-medium hover:bg-[#d6005b] transition-colors">Add Step</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Reorder Curriculum Modal -->
-    <div id="reorder-curriculum-modal" class="modal-overlay hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Reorder Curriculum Steps</h2>
-                <button class="close-modal-btn text-slate-400 hover:text-slate-600" data-modal-id="reorder-curriculum-modal">
-                    <span data-lucide="x" class="w-6 h-6"></span>
-                </button>
-            </div>
-            <div id="reorder-content" class="space-y-4">
-                <!-- Reorder content will be injected here -->
-            </div>
-            <div class="flex justify-end space-x-3 pt-4">
-                <button type="button" class="close-modal-btn px-4 py-2 text-slate-600 border border-slate-300 rounded-md hover:bg-slate-50" data-modal-id="reorder-curriculum-modal">Cancel</button>
-                <button type="button" id="save-reorder-btn" class="bg-[var(--tnt-pink)] text-white px-6 py-2 rounded-md font-medium hover:bg-[#d6005b] transition-colors">Save Order</button>
-            </div>
+            <button class="text-slate-400 hover:text-slate-600">
+                <span data-lucide="x" class="w-4 h-4"></span>
+            </button>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // =================================================================================
-            // DATABASE SIMULATION (Firebase-Ready)
-            // In a real app, this object would be replaced with calls to a Firestore database.
-            // =================================================================================
-            const db = {
-                // --- USERS COLLECTION ---
-                users: {
-                    'creator_001': {
-                        id: 'creator_001',
-                        name: 'Tre Forte',
-                        title: 'Chief Marketing Strategist & Sales Manager',
-                        email: 'tre@tntgrowth.com',
-                        avatar: 'https://i.ibb.co/2S8p5z3/avatar.png',
-                        department: 'All',
-                        role: 'creator',
-                        completedItems: [],
-                        pinnedItems: [],
-                        pathProgress: {},
-                        lastLogin: '2024-01-15',
-                        status: 'active',
-                        joinDate: '2023-01-01'
-                    },
-                    'user_001': {
-                        id: 'user_001',
-                        name: 'Adam Treboutat',
-                        title: 'CEO & Founder',
-                        email: 'adam@tntgrowth.com',
-                        avatar: 'https://i.ibb.co/2S8p5z3/avatar.png',
-                        department: 'Growth',
-                        role: 'admin',
-                        accessLevel: 'admin',
-                        completedItems: [],
-                        pinnedItems: [],
-                        pathProgress: { 'onboarding_growth': 0 },
-                        lastLogin: '2024-01-15',
-                        status: 'active',
-                        joinDate: '2023-06-01'
-                    },
-                    'user_002': {
-                        id: 'user_002',
-                        name: 'Tim Walton',
-                        title: 'Head of Growth',
-                        email: 'tim@tntgrowth.com',
-                        avatar: 'https://i.ibb.co/2S8p5z3/avatar.png',
-                        department: 'Growth',
-                        role: 'user',
-                        accessLevel: 'standard',
-                        completedItems: [],
-                        pinnedItems: [],
-                        pathProgress: { 'onboarding_growth': 0 },
-                        lastLogin: '2024-01-14',
-                        status: 'active',
-                        joinDate: '2024-01-05'
-                    },
-                    'user_003': {
-                        id: 'user_003',
-                        name: 'Billy Herrera-Arcia',
-                        title: 'Head of Analytics',
-                        email: 'billy@tntgrowth.com',
-                        avatar: 'https://i.ibb.co/2S8p5z3/avatar.png',
-                        department: 'Analytics',
-                        role: 'user',
-                        accessLevel: 'standard',
-                        completedItems: [],
-                        pinnedItems: [],
-                        pathProgress: { 'onboarding_analytics': 0 },
-                        lastLogin: '2024-01-13',
-                        status: 'active',
-                        joinDate: '2024-01-10'
-                    },
-                    'user_004': {
-                        id: 'user_004',
-                        name: 'Bruna Silva',
-                        title: 'Team Member',
-                        email: 'bruna@tntgrowth.com',
-                        avatar: 'https://i.ibb.co/2S8p5z3/avatar.png',
-                        department: 'Growth',
-                        role: 'user',
-                        accessLevel: 'standard',
-                        completedItems: [],
-                        pinnedItems: [],
-                        pathProgress: { 'onboarding_growth': 0 },
-                        lastLogin: '2024-01-12',
-                        status: 'active',
-                        joinDate: '2024-01-08'
-                    }
-                },
-                // --- CREDENTIALS COLLECTION (Backend Storage) ---
-                credentials: {
-                    'tre@tntgrowth.com': {
-                        email: 'tre@tntgrowth.com',
-                        passwordHash: 'hashed_tnt123', // In real app, this would be bcrypt hash
-                        salt: 'salt_tre',
-                        lastPasswordChange: '2024-01-01',
-                        failedAttempts: 0,
-                        lockedUntil: null
-                    },
-                    'adam@tntgrowth.com': {
-                        email: 'adam@tntgrowth.com',
-                        passwordHash: 'hashed_tnt123',
-                        salt: 'salt_adam',
-                        lastPasswordChange: '2024-01-01',
-                        failedAttempts: 0,
-                        lockedUntil: null
-                    },
-                    'tim@tntgrowth.com': {
-                        email: 'tim@tntgrowth.com',
-                        passwordHash: 'hashed_tnt123',
-                        salt: 'salt_tim',
-                        lastPasswordChange: '2024-01-01',
-                        failedAttempts: 0,
-                        lockedUntil: null
-                    },
-                    'billy@tntgrowth.com': {
-                        email: 'billy@tntgrowth.com',
-                        passwordHash: 'hashed_tnt123',
-                        salt: 'salt_billy',
-                        lastPasswordChange: '2024-01-01',
-                        failedAttempts: 0,
-                        lockedUntil: null
-                    },
-                    'bruna@tntgrowth.com': {
-                        email: 'bruna@tntgrowth.com',
-                        passwordHash: 'hashed_tnt123',
-                        salt: 'salt_bruna',
-                        lastPasswordChange: '2024-01-01',
-                        failedAttempts: 0,
-                        lockedUntil: null
-                    }
-                },
-                // --- ITEMS COLLECTION (Resources) ---
-                items: {
-                    1: { id: 1, department: "Analytics", type: "Vision", title: "A-Team and TNT Vision for Business Growth", url: "#", description: "Strategic vision document for business growth.", author: "Billy Herrera-Arcia", lastUpdated: "2024-04-19", skills: ['Strategy', 'Company Culture'], ratings: [5, 5, 4], comments: [{ user: 'user_123', text: 'Great overview!', date: '2025-08-01' }] },
-                    3: { id: 3, department: "Analytics", type: "Training", title: "Adding New Campaigns to Funnel.io", url: "https://www.loom.com/share/1bdea97546084986b2b9e15f28e8c0f0", description: "Step-by-step guide for adding campaigns.", author: "Adam Treboutat", lastUpdated: "2023-01-20", skills: ['Funnel.io', 'Campaign Setup'], ratings: [5, 4], comments: [] },
-                    4: { id: 4, department: "Growth", type: "Training", title: "Mastering Google Ads Conversions", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", description: "How to add new conversion tracking in Google Ads.", author: "Billy Herrera-Arcia", lastUpdated: "2025-08-01", skills: ['Google Ads', 'Conversion Tracking'], ratings: [5, 5, 5, 4], comments: [] },
-                    5: { id: 5, department: "Growth", type: "SOP", title: "SOP: Client Pacing Dashboard", url: "#", description: "Standard operating procedure for the client pacing dashboard.", author: "Billy Herrera-Arcia", lastUpdated: "2024-10-21", skills: ['Client Reporting', 'Pacing'], ratings: [4], comments: [] },
-                    6: { id: 6, department: "Creative", type: "Template", title: "Creative Roadmap Template", url: "#", description: "Template for creating creative roadmaps.", author: "Adam Treboutat", lastUpdated: "2024-07-03", skills: ['Creative Strategy', 'Planning'], ratings: [5, 5], comments: [] },
-                },
-                // --- LEARNING PATHS COLLECTION ---
-                paths: {
-                    'path_1': { id: 'path_1', title: 'New Analyst Onboarding', description: 'Essential training for all new analytics team members.', department: 'Analytics', itemIds: [1, 3, 5] },
-                    'path_2': { id: 'path_2', title: 'Advanced Growth Tactics', description: 'Level up your campaign management skills.', department: 'Growth', itemIds: [4] }
-                },
-                // --- ONBOARDING PATHS COLLECTION ---
-                onboarding: {
-                    'onboarding_analytics': {
-                        id: 'onboarding_analytics',
-                        title: 'Analytics Department Onboarding',
-                        description: 'Complete onboarding for new Analytics team members',
-                        department: 'Analytics',
-                        itemIds: [1, 3],
-                        required: true,
-                        estimatedTime: '2 hours'
-                    },
-                    'onboarding_growth': {
-                        id: 'onboarding_growth',
-                        title: 'Growth Department Onboarding',
-                        description: 'Complete onboarding for new Growth team members',
-                        department: 'Growth',
-                        itemIds: [4, 5],
-                        required: true,
-                        estimatedTime: '3 hours'
-                    },
-                    'onboarding_creative': {
-                        id: 'onboarding_creative',
-                        title: 'Creative Department Onboarding',
-                        description: 'Complete onboarding for new Creative team members',
-                        department: 'Creative',
-                        itemIds: [6],
-                        required: true,
-                        estimatedTime: '1 hour'
-                    }
-                }
-            };
-
-            // =================================================================================
-            // STATE MANAGEMENT
-            // =================================================================================
-            const appState = {
-                currentUser: null, // Will be set after login
-                isAuthenticated: false,
-                currentView: 'dashboard', // 'dashboard', 'department', 'paths', 'item', 'onboarding'
-                activeDepartment: null,
-                activePathId: null,
-                activeItemId: null,
-                searchQuery: '',
-                showLoginModal: false
-            };
-
-            // =================================================================================
-            // RENDER ENGINE
-            // =================================================================================
-            function render() {
-                renderSidebar();
-                renderMainContent();
-                lucide.createIcons();
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Enterprise-grade functionality
+        class TNTTrainingHub {
+            constructor() {
+                this.currentSection = 'dashboard';
+                this.filters = new Set(['all']);
+                this.searchTerm = '';
+                this.initializeEventListeners();
+                this.loadUserData();
             }
-
-            function renderSidebar() {
-                const nav = document.getElementById('main-nav');
-                const departments = [...new Set(Object.values(db.items).map(i => i.department))];
+            
+            initializeEventListeners() {
+                // Smart search with debouncing
+                const searchInput = document.getElementById('smart-search');
+                let searchTimeout;
                 
-                const navLinks = [
-                    { id: 'dashboard', icon: 'layout-dashboard', label: 'Dashboard' },
-                    { id: 'onboarding', icon: 'graduation-cap', label: 'Onboarding' },
-                    { id: 'paths', icon: 'git-merge', label: 'Learning Paths' },
-                    ...departments.map(d => ({ id: `dept-${d}`, icon: getIconForDept(d), label: d }))
-                ];
-                
-                // Add admin/creator only tabs
-                if (appState.currentUser && (appState.currentUser.accessLevel === 'admin' || appState.currentUser.role === 'creator')) {
-                    navLinks.push({ id: 'members', icon: 'users', label: 'Members' });
-                    navLinks.push({ id: 'curriculum', icon: 'book-open', label: 'Curriculum Creator' });
-                }
-
-                nav.innerHTML = navLinks.map(link => `
-                    <a href="#" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-md text-slate-600 hover:bg-slate-100" data-view="${link.id.startsWith('dept-') ? 'department' : link.id}" data-dept="${link.id.startsWith('dept-') ? link.label : ''}">
-                        <span data-lucide="${link.icon}" class="w-5 h-5 mr-3"></span>
-                        ${link.label}
-                    </a>
-                `).join('');
-
-                // Highlight active link
-                document.querySelectorAll('.sidebar-link').forEach(link => {
-                    const isDeptActive = appState.currentView === 'department' && link.dataset.dept === appState.activeDepartment;
-                    const isViewActive = appState.currentView === link.dataset.view && !isDeptActive;
-                    link.classList.toggle('active', isDeptActive || isViewActive);
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        this.searchTerm = e.target.value;
+                        this.performSearch();
+                    }, 300);
                 });
                 
-                // Render User Profile
-                const userProfile = document.getElementById('user-profile');
-                if (appState.isAuthenticated && appState.currentUser) {
-                    userProfile.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img src="${appState.currentUser.avatar}" alt="User Avatar" class="w-10 h-10 rounded-full">
-                                <div class="ml-3">
-                                    <p class="font-semibold text-sm">${appState.currentUser.name}</p>
-                                    <p class="text-xs text-slate-500">${appState.currentUser.title}</p>
-                                </div>
-                            </div>
-                            ${appState.currentUser.role === 'admin' || appState.currentUser.role === 'creator' ? `
-                                <button id="admin-btn" class="text-slate-400 hover:text-slate-600">
-                                    <span data-lucide="settings" class="w-5 h-5"></span>
-                                </button>
-                            ` : ''}
-                        </div>
-                        <button id="logout-btn" class="w-full mt-3 text-xs text-slate-500 hover:text-slate-700 text-left">
-                            Logout
-                        </button>
-                    `;
+                // Filter chips
+                document.querySelectorAll('.filter-chip').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        this.toggleFilter(chip.dataset.filter);
+                    });
+                });
+                
+                // Department cards
+                document.querySelectorAll('[data-department]').forEach(card => {
+                    card.addEventListener('click', () => {
+                        this.navigateToDepartment(card.dataset.department);
+                    });
+                });
+            }
+            
+            toggleFilter(filter) {
+                const chip = document.querySelector(`[data-filter="${filter}"]`);
+                
+                if (filter === 'all') {
+                    // Reset all filters
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    this.filters.clear();
+                    this.filters.add('all');
                 } else {
-                    userProfile.innerHTML = `
-                        <button id="login-btn" class="w-full text-left">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
-                                    <span data-lucide="user" class="w-5 h-5 text-slate-400"></span>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="font-semibold text-sm text-slate-700">Click to Login</p>
-                                    <p class="text-xs text-slate-500">Access your progress</p>
-                                </div>
-                            </div>
-                        </button>
-                    `;
-                }
-            }
-
-            function renderMainContent() {
-                const container = document.getElementById('main-content');
-                // Clear previous content
-                container.innerHTML = '';
-
-                if (!appState.isAuthenticated) {
-                    container.innerHTML = `
-                        <div class="flex items-center justify-center h-full">
-                            <div class="text-center">
-                                <h1 class="text-3xl font-bold text-slate-900 mb-4">Welcome to TNT Academy</h1>
-                                <p class="text-slate-600 mb-8">Please login to access your training resources and track your progress.</p>
-                                <button id="login-prompt-btn" class="bg-[var(--tnt-pink)] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#d6005b] transition-colors">
-                                    Login to Continue
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    return;
-                }
-
-                switch (appState.currentView) {
-                    case 'dashboard':
-                        container.innerHTML = renderDashboard();
-                        break;
-                    case 'onboarding':
-                        container.innerHTML = renderOnboarding();
-                        break;
-                    case 'members':
-                        container.innerHTML = renderMembers();
-                        break;
-                    case 'curriculum':
-                        container.innerHTML = renderCurriculumCreator();
-                        break;
-                    case 'department':
-                        container.innerHTML = renderDepartment(appState.activeDepartment);
-                        break;
-                    case 'paths':
-                        container.innerHTML = renderLearningPaths();
-                        break;
-                    case 'item':
-                        container.innerHTML = renderItemDetail(appState.activeItemId);
-                        break;
-                    case 'search':
-                        container.innerHTML = renderSearchResults(appState.searchQuery);
-                        break;
-                }
-            }
-
-            // =================================================================================
-            // VIEW TEMPLATES
-            // =================================================================================
-            function renderDashboard() {
-                const recentlyAdded = Object.values(db.items).sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)).slice(0, 3);
-                const pinned = Object.values(db.items).filter(item => appState.currentUser.pinnedItems.includes(item.id));
-                const userPaths = Object.values(db.paths).filter(p => appState.currentUser.pathProgress[p.id]);
-
-                return `
-                    <h1 class="text-3xl font-bold mb-2">Welcome back, ${appState.currentUser.name.split(' ')[0]}!</h1>
-                    <p class="text-slate-500 mb-8">Here's your learning snapshot for today.</p>
+                    // Toggle specific filter
+                    document.querySelector('[data-filter="all"]').classList.remove('active');
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- My Learning Paths -->
-                        <div class="lg:col-span-2 space-y-6">
-                            <div class="content-card">
-                                <h2 class="text-xl font-bold mb-4">My Learning Paths</h2>
-                                <div class="space-y-4">
-                                    ${userPaths.length > 0 ? userPaths.map(createPathProgressCard).join('') : '<p class="text-slate-500">You are not enrolled in any paths yet.</p>'}
-                                </div>
-                            </div>
-                             <!-- Recently Added -->
-                            <div class="content-card">
-                                <h2 class="text-xl font-bold mb-4">What's New</h2>
-                                <div class="space-y-3">${recentlyAdded.map(createListItem).join('')}</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Pinned & Badges -->
-                        <div class="space-y-6">
-                            <div class="content-card">
-                                <h2 class="text-xl font-bold mb-4">Pinned Resources</h2>
-                                <div class="space-y-3">${pinned.length > 0 ? pinned.map(createListItem).join('') : '<p class="text-slate-500">Pin items for quick access!</p>'}</div>
-                            </div>
-                            <div class="content-card">
-                                <h2 class="text-xl font-bold mb-4">My Badges</h2>
-                                <div class="flex flex-wrap gap-4">
-                                    ${createBadge('Analytics Onboarding', true)}
-                                    ${createBadge('Growth Expert', false)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function renderDepartment(dept) {
-                const items = Object.values(db.items).filter(i => i.department === dept);
-                return `
-                    <h1 class="text-3xl font-bold mb-8">${dept} Resources</h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        ${items.map(createItemCard).join('')}
-                    </div>
-                `;
-            }
-            
-            function renderLearningPaths() {
-                return `
-                    <h1 class="text-3xl font-bold mb-8">Learning Paths</h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        ${Object.values(db.paths).map(createPathCard).join('')}
-                    </div>
-                `;
-            }
-            
-            function renderOnboarding() {
-                const userOnboarding = Object.values(db.onboarding).filter(onboarding => 
-                    onboarding.department === appState.currentUser.department || appState.currentUser.role === 'admin'
-                );
-                
-                return `
-                    <div class="space-y-8">
-                        <div>
-                            <h1 class="text-3xl font-bold mb-4">Onboarding</h1>
-                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                                <h2 class="text-lg font-semibold text-blue-900 mb-3">Why Complete Your Onboarding?</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-blue-800">
-                                    <div>
-                                        <h3 class="font-semibold mb-2">🎯 Essential Knowledge</h3>
-                                        <p>Master the core processes, tools, and methodologies specific to your department. This ensures you can contribute effectively from day one.</p>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold mb-2">📈 Career Growth</h3>
-                                        <p>Build a strong foundation that will accelerate your professional development and open doors to advanced opportunities within the team.</p>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold mb-2">🤝 Team Alignment</h3>
-                                        <p>Understand our company culture, values, and how your role fits into the bigger picture of TNT Growth's mission.</p>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold mb-2">⚡ Efficiency Boost</h3>
-                                        <p>Learn proven workflows and best practices that will help you work smarter, not harder, and deliver exceptional results.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            ${userOnboarding.map(createOnboardingCard).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            function renderMembers() {
-                const allMembers = Object.values(db.users).filter(user => user.role !== 'admin');
-                const adminMembers = Object.values(db.users).filter(user => user.role === 'admin');
-                
-                // Debug: Log current user data
-                console.log('Current user data:', db.users);
-                
-                return `
-                    <div class="space-y-8">
-                        <div class="flex justify-between items-center">
-                            <h1 class="text-3xl font-bold">Team Members</h1>
-                            <div class="flex space-x-3">
-                                <button id="refresh-data-btn" class="bg-slate-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-700 transition-colors flex items-center">
-                                    <span data-lucide="refresh-cw" class="w-4 h-4 mr-2"></span>
-                                    Refresh Data
-                                </button>
-                                <button id="add-member-btn" class="bg-[var(--tnt-pink)] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#d6005b] transition-colors flex items-center">
-                                    <span data-lucide="plus" class="w-4 h-4 mr-2"></span>
-                                    Add Member
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Admin Members -->
-                        <div>
-                            <h2 class="text-xl font-semibold mb-4 text-slate-700">Administrators</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                ${adminMembers.map(createMemberCard).join('')}
-                            </div>
-                        </div>
-                        
-                        <!-- Team Members -->
-                        <div>
-                            <h2 class="text-xl font-semibold mb-4 text-slate-700">Team Members (${allMembers.length})</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                ${allMembers.map(createMemberCard).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            function renderCurriculumCreator() {
-                const departments = ['Analytics', 'Growth', 'Creative'];
-                const allItems = Object.values(db.items);
-                
-                return `
-                    <div class="space-y-8">
-                        <div class="flex justify-between items-center">
-                            <h1 class="text-3xl font-bold">Curriculum Creator</h1>
-                            <button id="add-curriculum-step-btn" class="bg-[var(--tnt-pink)] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#d6005b] transition-colors flex items-center">
-                                <span data-lucide="plus" class="w-4 h-4 mr-2"></span>
-                                Add Step to Curriculum
-                            </button>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <!-- Department Onboardings -->
-                            <div class="lg:col-span-2">
-                                <h2 class="text-xl font-semibold mb-4">Department Onboardings</h2>
-                                <div class="space-y-4">
-                                    ${departments.map(dept => {
-                                        const onboarding = db.onboarding[`onboarding_${dept.toLowerCase()}`];
-                                        const items = onboarding ? onboarding.itemIds.map(id => db.items[id]).filter(Boolean) : [];
-                                        const videos = items.filter(item => item.type === 'Training').length;
-                                        const docs = items.filter(item => item.type !== 'Training').length;
-                                        
-                                        return `
-                                            <div class="bg-white rounded-lg border p-6">
-                                                <div class="flex justify-between items-start mb-4">
-                                                    <div>
-                                                        <h3 class="text-lg font-semibold">${dept} Onboarding</h3>
-                                                        <p class="text-sm text-slate-600 mt-1">Complete curriculum for new ${dept} team members</p>
-                                                    </div>
-                                                    <div class="flex space-x-2">
-                                                        <button class="reorder-curriculum-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-md text-sm font-medium transition-colors" data-department="${dept}">
-                                                            Reorder Steps
-                                                        </button>
-                                                        <button class="edit-curriculum-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-md text-sm font-medium transition-colors" data-department="${dept}">
-                                                            Edit Curriculum
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="grid grid-cols-3 gap-4 text-center">
-                                                    <div class="bg-blue-50 rounded-lg p-3">
-                                                        <div class="text-2xl font-bold text-blue-600">${items.length}</div>
-                                                        <div class="text-xs text-blue-600">Total Steps</div>
-                                                    </div>
-                                                    <div class="bg-green-50 rounded-lg p-3">
-                                                        <div class="text-2xl font-bold text-green-600">${videos}</div>
-                                                        <div class="text-xs text-green-600">Videos</div>
-                                                    </div>
-                                                    <div class="bg-purple-50 rounded-lg p-3">
-                                                        <div class="text-2xl font-bold text-purple-600">${docs}</div>
-                                                        <div class="text-xs text-purple-600">Documents</div>
-                                                    </div>
-                                                </div>
-                                                
-                                                ${items.length > 0 ? `
-                                                    <div class="mt-4">
-                                                        <h4 class="font-medium text-sm mb-2">Current Steps:</h4>
-                                                        <div class="space-y-2">
-                                                            ${items.map((item, index) => `
-                                                                <div class="flex items-center justify-between bg-slate-50 rounded-lg p-2">
-                                                                    <div class="flex items-center">
-                                                                        <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded mr-2">${index + 1}</span>
-                                                                        <span class="text-sm font-medium">${item.title}</span>
-                                                                        <span class="text-xs text-slate-500 ml-2">${item.type}</span>
-                                                                    </div>
-                                                                    <button class="remove-step-btn text-red-500 hover:text-red-700 text-sm" data-item-id="${item.id}" data-department="${dept}">
-                                                                        <span data-lucide="x" class="w-4 h-4"></span>
-                                                                    </button>
-                                                                </div>
-                                                            `).join('')}
-                                                        </div>
-                                                    </div>
-                                                ` : '<p class="text-sm text-slate-500 mt-4">No steps added yet. Click "Edit Curriculum" to get started.</p>'}
-                                            </div>
-                                        `;
-                                    }).join('')}
-                                </div>
-                            </div>
-                            
-                            <!-- Available Resources -->
-                            <div>
-                                <h2 class="text-xl font-semibold mb-4">Available Resources</h2>
-                                <div class="space-y-2 max-h-96 overflow-y-auto">
-                                    ${allItems.map(item => `
-                                        <div class="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50">
-                                            <div class="flex-1">
-                                                <p class="text-sm font-medium">${item.title}</p>
-                                                <p class="text-xs text-slate-500">${item.department} • ${item.type}</p>
-                                            </div>
-                                            <button class="add-to-curriculum-btn text-[var(--tnt-pink)] hover:text-[#d6005b] text-xs font-medium" data-item-id="${item.id}">
-                                                Add to Curriculum
-                                            </button>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            function renderItemDetail(itemId) {
-                const item = db.items[itemId];
-                if (!item) return `<p>Error: Item not found.</p>`;
-                
-                const avgRating = item.ratings.length > 0 ? (item.ratings.reduce((a, b) => a + b, 0) / item.ratings.length).toFixed(1) : 'No ratings';
-
-                return `
-                    <div class="max-w-4xl mx-auto">
-                        <button class="back-btn flex items-center text-sm text-slate-500 hover:text-slate-900 mb-6">
-                            <span data-lucide="arrow-left" class="w-4 h-4 mr-2"></span>
-                            Back to ${item.department}
-                        </button>
-
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                            ${item.type === 'Training' ? `<div class="aspect-video bg-black"><iframe class="w-full h-full" src="${getEmbedUrl(item.url)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>` : ''}
-                            
-                            <div class="p-8">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <p class="text-sm font-bold text-[var(--tnt-pink)] uppercase">${item.type}</p>
-                                        <h1 class="text-4xl font-bold mt-1">${item.title}</h1>
-                                    </div>
-                                    <a href="${item.url}" target="_blank" class="tnt-button font-semibold py-2 px-4 rounded-lg flex items-center transition-colors text-sm">
-                                        <span data-lucide="external-link" class="w-4 h-4 mr-2"></span>
-                                        View Original
-                                    </a>
-                                </div>
-                                <p class="text-slate-600 mt-4">${item.description}</p>
-                                
-                                <div class="flex items-center mt-6 border-t border-b border-slate-200 py-4">
-                                    <!-- Skills -->
-                                    <div class="flex-1">
-                                        <h3 class="text-xs uppercase font-semibold text-slate-400 mb-2">Skills Covered</h3>
-                                        <div class="flex flex-wrap gap-2">
-                                            ${item.skills.map(skill => `<span class="bg-slate-100 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full">${skill}</span>`).join('')}
-                                        </div>
-                                    </div>
-                                    <!-- Rating -->
-                                    <div class="text-right">
-                                        <h3 class="text-xs uppercase font-semibold text-slate-400 mb-2">Average Rating</h3>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex text-amber-400">${[1,2,3,4,5].map(i => `<span data-lucide="star" class="w-5 h-5 ${i <= Math.round(avgRating) ? 'fill-current' : ''}"></span>`).join('')}</div>
-                                            <span class="font-bold text-lg">${avgRating}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Comments Section -->
-                                <div class="mt-8">
-                                    <h2 class="text-xl font-bold mb-4">Discussion</h2>
-                                    <div class="space-y-4">
-                                        ${item.comments.map(c => createComment(c)).join('')}
-                                    </div>
-                                    <div class="mt-6 flex items-start space-x-3">
-                                        <img src="${appState.currentUser.avatar}" class="w-10 h-10 rounded-full">
-                                        <textarea class="flex-1 p-2 border rounded-md" placeholder="Add a comment..."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            function renderSearchResults(query) {
-                const results = Object.values(db.items).filter(item => 
-                    item.title.toLowerCase().includes(query.toLowerCase()) ||
-                    item.description.toLowerCase().includes(query.toLowerCase()) ||
-                    item.department.toLowerCase().includes(query.toLowerCase()) ||
-                    item.skills.some(skill => skill.toLowerCase().includes(query.toLowerCase()))
-                );
-                
-                return `
-                    <h1 class="text-3xl font-bold mb-2">Search Results</h1>
-                    <p class="text-slate-500 mb-8">Found ${results.length} results for "${query}"</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        ${results.map(createItemCard).join('')}
-                    </div>
-                `;
-            }
-
-            // =================================================================================
-            // COMPONENT CREATORS
-            // =================================================================================
-            function createItemCard(item) {
-                return `
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" data-view="item" data-item-id="${item.id}">
-                        <div class="relative h-40 bg-slate-200">
-                            <img src="${getThumbnailUrl(item)}" alt="${item.title}" class="w-full h-full object-cover">
-                            ${item.type === 'Training' ? '<div class="absolute inset-0 bg-black/20"></div><span data-lucide="play-circle" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 text-white/80"></span>' : ''}
-                        </div>
-                        <div class="p-4 flex-grow flex flex-col">
-                            <p class="text-xs font-bold text-[var(--tnt-pink)]">${item.type}</p>
-                            <h3 class="font-bold text-slate-800 line-clamp-2 mt-1 flex-grow">${item.title}</h3>
-                            <p class="text-xs text-slate-400 mt-2">By ${item.author}</p>
-                        </div>
-                    </div>`;
-            }
-            
-            function createPathCard(path) {
-                const progress = appState.currentUser.pathProgress[path.id] || 0;
-                const total = path.itemIds.length;
-                const percent = total > 0 ? Math.round((progress / total) * 100) : 0;
-                return `
-                    <div class="content-card">
-                        <h3 class="font-bold text-lg">${path.title}</h3>
-                        <p class="text-sm text-slate-500 mt-1 mb-4 h-10">${path.description}</p>
-                        <div class="flex items-center justify-between text-sm text-slate-500 mb-2">
-                            <span>Progress</span>
-                            <span>${progress} / ${total} Steps</span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-2.5">
-                            <div class="progress-bar-fill h-2.5 rounded-full" style="width: ${percent}%"></div>
-                        </div>
-                    </div>`;
-            }
-            
-            function createOnboardingCard(onboarding) {
-                const progress = appState.currentUser.pathProgress[onboarding.id] || 0;
-                const total = onboarding.itemIds.length;
-                const percent = total > 0 ? Math.round((progress / total) * 100) : 0;
-                const isCompleted = percent === 100;
-                
-                // Get the actual items for this onboarding
-                const onboardingItems = onboarding.itemIds.map(id => db.items[id]).filter(Boolean);
-                const videos = onboardingItems.filter(item => item.type === 'Training').length;
-                const docs = onboardingItems.filter(item => item.type !== 'Training').length;
-                
-                return `
-                    <div class="content-card ${isCompleted ? 'border-2 border-green-200 bg-green-50' : ''}">
-                        <div class="flex items-start justify-between mb-3">
-                            <h3 class="font-bold text-lg">${onboarding.title}</h3>
-                            <div class="flex items-center space-x-2">
-                                ${isCompleted ? '<span data-lucide="check-circle" class="w-6 h-6 text-green-500"></span>' : ''}
-                                ${appState.currentUser.role === 'creator' ? '<button class="text-slate-400 hover:text-slate-600" title="Manage Onboarding"><span data-lucide="settings" class="w-5 h-5"></span></button>' : ''}
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-500 mb-4">${onboarding.description}</p>
-                        
-                        <!-- Progress Summary -->
-                        <div class="bg-slate-50 rounded-lg p-3 mb-4">
-                            <div class="flex items-center justify-between text-sm font-medium mb-2">
-                                <span>Progress: ${percent}%</span>
-                                <span>${progress} / ${total} Steps</span>
-                            </div>
-                            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-3">
-                                <div class="progress-bar-fill h-2.5 rounded-full" style="width: ${percent}%"></div>
-                            </div>
-                            <div class="flex items-center justify-between text-xs text-slate-500">
-                                <span>📹 ${videos} Videos</span>
-                                <span>📄 ${docs} Documents</span>
-                                <span>⏱️ ${onboarding.estimatedTime}</span>
-                            </div>
-                        </div>
-                        
-                        <button class="w-full bg-[var(--tnt-pink)] text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-[#d6005b] transition-colors">
-                            ${isCompleted ? 'Review' : 'Continue'}
-                        </button>
-                    </div>`;
-            }
-            
-            function createMemberCard(member) {
-                const onboardingProgress = getUserOnboardingProgress(member);
-                const lastLoginDays = getDaysSinceLastLogin(member.lastLogin);
-                
-                return `
-                    <div class="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
-                        <div class="flex items-start justify-between mb-3">
-                            <div class="flex items-center">
-                                <img src="${member.avatar}" alt="${member.name}" class="w-12 h-12 rounded-full mr-3">
-                                <div>
-                                    <h3 class="font-semibold text-slate-900">${member.name}</h3>
-                                    <p class="text-sm text-slate-500">${member.title}</p>
-                                    <p class="text-xs text-slate-400">${member.department}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="px-2 py-1 text-xs rounded-full ${member.role === 'admin' ? 'bg-purple-100 text-purple-700' : member.role === 'creator' ? 'bg-orange-100 text-orange-700' : 'bg-sky-100 text-sky-700'}">
-                                    ${member.role === 'admin' ? 'Admin' : member.role === 'creator' ? 'Creator' : 'Member'}
-                                </span>
-                                <span class="px-2 py-1 text-xs rounded-full ${member.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
-                                    ${member.status}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="space-y-2 mb-3">
-                            <div class="flex justify-between text-xs text-slate-500">
-                                <span>Onboarding Progress</span>
-                                <span>${onboardingProgress}%</span>
-                            </div>
-                            <div class="w-full bg-slate-200 rounded-full h-1.5">
-                                <div class="bg-green-500 h-1.5 rounded-full" style="width: ${onboardingProgress}%"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>${member.completedItems.length} resources completed</span>
-                            <span>${lastLoginDays} days ago</span>
-                        </div>
-                        
-                                                <div class="flex justify-end mt-3 space-x-2">
-                            <button class="edit-member-btn text-slate-400 hover:text-slate-600 p-1" title="Edit Member" data-member-id="${member.id}">
-                                <span data-lucide="edit" class="w-4 h-4"></span>
-                                </button>
-                            <button class="text-slate-400 hover:text-red-600 p-1" title="Remove Member">
-                                <span data-lucide="trash-2" class="w-4 h-4"></span>
-                                </button>
-                            </div>
-                    </div>`;
-            }
-            
-            function createPathProgressCard(path) {
-                 const progress = appState.currentUser.pathProgress[path.id] || 0;
-                 const total = path.itemIds.length;
-                 const percent = total > 0 ? Math.round((progress / total) * 100) : 0;
-                 return `
-                    <div>
-                        <div class="flex items-center justify-between text-sm mb-1">
-                            <p class="font-semibold">${path.title}</p>
-                            <p class="text-slate-500">${percent}%</p>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-2">
-                            <div class="progress-bar-fill h-2 rounded-full" style="width: ${percent}%"></div>
-                        </div>
-                    </div>
-                 `;
-            }
-
-            function createListItem(item) {
-                 return `<div class="flex items-center justify-between p-2 rounded-md hover:bg-slate-100 cursor-pointer" data-view="item" data-item-id="${item.id}">
-                    <div class="flex items-center min-w-0"><span data-lucide="${getIconForDept(item.department)}" class="w-5 h-5 mr-3 text-slate-400 flex-shrink-0"></span>
-                        <div class="min-w-0"><p class="font-semibold text-slate-700 truncate">${item.title}</p><p class="text-sm text-slate-500">${item.department}</p></div>
-                    </div><span data-lucide="chevron-right" class="w-5 h-5 text-slate-400"></span>
-                </div>`;
-            }
-            
-            function createBadge(name, earned) {
-                return `
-                    <div class="text-center">
-                        <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto ${earned ? 'bg-amber-100' : 'bg-slate-200'}">
-                            <span data-lucide="award" class="w-10 h-10 ${earned ? 'text-amber-500' : 'text-slate-400'}"></span>
-                        </div>
-                        <p class="text-xs font-medium mt-2 ${earned ? 'text-slate-700' : 'text-slate-400'}">${name}</p>
-                    </div>`;
-            }
-            
-            function createComment(comment) {
-                const user = db.users[comment.user];
-                return `<div class="flex items-start space-x-3">
-                    <img src="${user.avatar}" class="w-10 h-10 rounded-full">
-                    <div class="flex-1">
-                        <div class="bg-slate-100 rounded-lg p-3">
-                            <p class="font-semibold text-sm">${user.name}</p>
-                            <p class="text-sm">${comment.text}</p>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-1">${comment.date}</p>
-                    </div>
-                </div>`;
-            }
-
-            // =================================================================================
-            // EVENT LISTENERS
-            // =================================================================================
-            function setupEventListeners() {
-                const sidebar = document.getElementById('sidebar');
-                const mainContent = document.getElementById('main-content');
-                const globalSearch = document.getElementById('global-search');
-                
-                // Sidebar navigation
-                sidebar.addEventListener('click', e => {
-                    const link = e.target.closest('.sidebar-link');
-                    const loginBtn = e.target.closest('#login-btn');
-                    const logoutBtn = e.target.closest('#logout-btn');
-                    const adminBtn = e.target.closest('#admin-btn');
-                    const addResourceBtn = e.target.closest('#add-resource-btn');
-                    
-                    if (link) {
-                        e.preventDefault();
-                        appState.currentView = link.dataset.view;
-                        appState.activeDepartment = link.dataset.dept || null;
-                        render();
-                    }
-                    
-                    if (loginBtn) {
-                        e.preventDefault();
-                        showModal('login-modal');
-                    }
-                    
-                    if (logoutBtn) {
-                        e.preventDefault();
-                        logout();
-                    }
-                    
-                    if (adminBtn) {
-                        e.preventDefault();
-                        showModal('admin-modal');
-                        renderAdminDashboard();
-                    }
-                    
-                    if (addResourceBtn) {
-                        e.preventDefault();
-                        showModal('add-resource-modal');
-                    }
-                });
-                
-                // Main content interactions
-                mainContent.addEventListener('click', e => {
-                    const card = e.target.closest('[data-view="item"]');
-                    const backBtn = e.target.closest('.back-btn');
-                    const loginPromptBtn = e.target.closest('#login-prompt-btn');
-                    const addMemberBtn = e.target.closest('#add-member-btn');
-                    
-                    if (card) {
-                        appState.currentView = 'item';
-                        appState.activeItemId = parseInt(card.dataset.itemId);
-                        render();
-                    }
-                    if(backBtn) {
-                        const item = db.items[appState.activeItemId];
-                        appState.currentView = 'department';
-                        appState.activeDepartment = item.department;
-                        render();
-                    }
-                    if (loginPromptBtn) {
-                        showModal('login-modal');
-                    }
-                    if (addMemberBtn) {
-                        e.preventDefault();
-                        showModal('add-member-modal');
-                    }
-                    
-                    // Add curriculum step button
-                    const addCurriculumStepBtn = e.target.closest('#add-curriculum-step-btn');
-                    if (addCurriculumStepBtn) {
-                        e.preventDefault();
-                        showModal('add-curriculum-step-modal');
-                    }
-                    
-                    // Refresh data button
-                    const refreshDataBtn = e.target.closest('#refresh-data-btn');
-                    if (refreshDataBtn) {
-                        e.preventDefault();
-                        render();
-                        showNotification('Data refreshed! Check console for debug info.', 'success');
-                    }
-                    
-                    // Edit member button
-                    const editMemberBtn = e.target.closest('.edit-member-btn');
-                    if (editMemberBtn) {
-                        e.preventDefault();
-                        const memberId = editMemberBtn.dataset.memberId;
-                        const member = db.users[memberId];
-                        if (member) {
-                            console.log('Editing member:', member); // Debug log
-                            // Populate edit form
-                            document.getElementById('edit-member-id').value = member.id;
-                            document.getElementById('edit-member-name').value = member.name;
-                            document.getElementById('edit-member-email').value = member.email;
-                            document.getElementById('edit-member-title').value = member.title;
-                            document.getElementById('edit-member-department').value = member.department;
-                            document.getElementById('edit-member-role').value = member.role;
-                            document.getElementById('edit-member-access').value = member.accessLevel || 'standard';
-                            document.getElementById('edit-member-status').value = member.status;
-                            showModal('edit-member-modal');
-                        } else {
-                            console.error('Member not found:', memberId); // Debug log
-                        }
-                    }
-                    
-                    // Onboarding management button
-                    const onboardingManageBtn = e.target.closest('[title="Manage Onboarding"]');
-                    if (onboardingManageBtn) {
-                        e.preventDefault();
-                        showModal('onboarding-management-modal');
-                    }
-                    
-                    // Manage onboarding button in admin dashboard
-                    const manageOnboardingBtn = e.target.closest('#manage-onboarding-btn');
-                    if (manageOnboardingBtn) {
-                        e.preventDefault();
-                        showModal('onboarding-management-modal');
-                    }
-                    
-                    // Curriculum Creator buttons
-                    const editCurriculumBtn = e.target.closest('.edit-curriculum-btn');
-                    const addToCurriculumBtn = e.target.closest('.add-to-curriculum-btn');
-                    const removeStepBtn = e.target.closest('.remove-step-btn');
-                    
-                    if (editCurriculumBtn) {
-                        e.preventDefault();
-                        const department = editCurriculumBtn.dataset.department;
-                        showNotification(`Editing ${department} curriculum. Use the "Add to Curriculum" buttons to add resources.`, 'info');
-                    }
-                    
-                    if (addToCurriculumBtn) {
-                        e.preventDefault();
-                        const itemId = parseInt(addToCurriculumBtn.dataset.itemId);
-                        const item = db.items[itemId];
-                        
-                        // For now, add to the department's onboarding
-                        const department = item.department;
-                        const onboardingKey = `onboarding_${department.toLowerCase()}`;
-                        
-                        if (db.onboarding[onboardingKey]) {
-                            if (!db.onboarding[onboardingKey].itemIds.includes(itemId)) {
-                                db.onboarding[onboardingKey].itemIds.push(itemId);
-                                render();
-                                showNotification(`Added "${item.title}" to ${department} onboarding!`, 'success');
-                            } else {
-                                showNotification('This resource is already in the curriculum.', 'info');
-                            }
-                        } else {
-                            showNotification('Onboarding not found for this department.', 'error');
-                        }
-                    }
-                    
-                    if (removeStepBtn) {
-                        e.preventDefault();
-                        const itemId = parseInt(removeStepBtn.dataset.itemId);
-                        const department = removeStepBtn.dataset.department;
-                        const onboardingKey = `onboarding_${department.toLowerCase()}`;
-                        
-                        if (db.onboarding[onboardingKey]) {
-                            const index = db.onboarding[onboardingKey].itemIds.indexOf(itemId);
-                            if (index > -1) {
-                                db.onboarding[onboardingKey].itemIds.splice(index, 1);
-                                render();
-                                showNotification('Step removed from curriculum!', 'success');
-                            }
-                        }
-                    }
-                    
-                    // Reorder curriculum button
-                    const reorderCurriculumBtn = e.target.closest('.reorder-curriculum-btn');
-                    if (reorderCurriculumBtn) {
-                        e.preventDefault();
-                        const department = reorderCurriculumBtn.dataset.department;
-                        const onboardingKey = `onboarding_${department.toLowerCase()}`;
-                        const onboarding = db.onboarding[onboardingKey];
-                        
-                        if (onboarding && onboarding.itemIds.length > 0) {
-                            const items = onboarding.itemIds.map(id => db.items[id]).filter(Boolean);
-                            const reorderContent = document.getElementById('reorder-content');
-                            
-                            reorderContent.innerHTML = `
-                                <div class="mb-4">
-                                    <h3 class="font-semibold mb-2">${department} Curriculum Steps</h3>
-                                    <p class="text-sm text-slate-600">Drag and drop to reorder steps</p>
-                                </div>
-                                <div id="reorder-list" class="space-y-2">
-                                    ${items.map((item, index) => `
-                                        <div class="flex items-center justify-between p-3 border rounded-lg bg-white cursor-move" data-item-id="${item.id}" data-index="${index}">
-                                            <div class="flex items-center">
-                                                <span data-lucide="grip-vertical" class="w-5 h-5 text-slate-400 mr-3"></span>
-                                                <span class="text-sm font-medium">${index + 1}. ${item.title}</span>
-                                                <span class="text-xs text-slate-500 ml-2">${item.type}</span>
-                                            </div>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            `;
-                            
-                            showModal('reorder-curriculum-modal');
-                            lucide.createIcons();
-                        } else {
-                            showNotification('No steps to reorder.', 'info');
-                        }
-                    }
-                });
-                
-                // Global search functionality
-                globalSearch.addEventListener('input', (e) => {
-                    const query = e.target.value.trim();
-                    if (query.length > 0) {
-                        appState.currentView = 'search';
-                        appState.searchQuery = query;
-                        render();
+                    if (this.filters.has(filter)) {
+                        this.filters.delete(filter);
+                        chip.classList.remove('active');
                     } else {
-                        appState.currentView = 'dashboard';
-                        render();
+                        this.filters.add(filter);
+                        chip.classList.add('active');
                     }
-                });
-                
-                // Modal interactions
-                document.addEventListener('click', e => {
-                    const closeBtn = e.target.closest('.close-modal-btn');
-                    if (closeBtn) {
-                        const modalId = closeBtn.dataset.modalId;
-                        hideModal(modalId);
-                    }
-                });
-                
-                // Form submissions
-                const loginForm = document.getElementById('login-form');
-                const addResourceForm = document.getElementById('add-resource-form');
-                const addMemberForm = document.getElementById('add-member-form');
-                const editMemberForm = document.getElementById('edit-member-form');
-                
-                if (loginForm) {
-                    loginForm.addEventListener('submit', handleLogin);
-                }
-                
-                if (addResourceForm) {
-                    addResourceForm.addEventListener('submit', handleAddResource);
-                }
-                
-                if (addMemberForm) {
-                    addMemberForm.addEventListener('submit', handleAddMember);
-                }
-                
-                if (editMemberForm) {
-                    editMemberForm.addEventListener('submit', handleEditMember);
-                }
-                
-                const addCurriculumStepForm = document.getElementById('add-curriculum-step-form');
-                if (addCurriculumStepForm) {
-                    addCurriculumStepForm.addEventListener('submit', handleAddCurriculumStep);
-                }
-            }
-
-            // =================================================================================
-            // AUTHENTICATION & RESOURCE MANAGEMENT
-            // =================================================================================
-            function handleLogin(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                
-                // Check if user exists in credentials
-                const credentials = db.credentials[email];
-                const user = Object.values(db.users).find(u => u.email === email);
-                
-                if (user && credentials && password === 'tnt123') { // In real app, verify against passwordHash
-                    // Update last login
-                    user.lastLogin = new Date().toISOString().split('T')[0];
                     
-                    appState.currentUser = user;
-                    appState.isAuthenticated = true;
-                    hideModal('login-modal');
-                    render();
-                    showNotification('Login successful!', 'success');
-                } else {
-                    showNotification('Invalid credentials. Try: tre@tntgrowth.com / tnt123', 'error');
-                }
-            }
-            
-            function logout() {
-                appState.currentUser = null;
-                appState.isAuthenticated = false;
-                appState.currentView = 'dashboard';
-                render();
-                showNotification('Logged out successfully', 'success');
-            }
-            
-            function handleAddResource(e) {
-                e.preventDefault();
-                
-                const newResource = {
-                    id: Date.now(), // Simple ID generation
-                    title: document.getElementById('resource-title').value,
-                    type: document.getElementById('resource-type').value,
-                    department: document.getElementById('resource-department').value,
-                    author: document.getElementById('resource-author').value,
-                    url: document.getElementById('resource-url').value,
-                    description: document.getElementById('resource-description').value,
-                    skills: document.getElementById('resource-skills').value.split(',').map(s => s.trim()).filter(s => s),
-                    lastUpdated: new Date().toISOString().split('T')[0],
-                    ratings: [],
-                    comments: []
-                };
-                
-                // Add to database
-                db.items[newResource.id] = newResource;
-                
-                // Reset form and close modal
-                e.target.reset();
-                hideModal('add-resource-modal');
-                render();
-                showNotification('Resource added successfully!', 'success');
-            }
-            
-            function handleAddMember(e) {
-                e.preventDefault();
-                
-                const email = document.getElementById('member-email').value;
-                const password = document.getElementById('member-password').value;
-                const department = document.getElementById('member-department').value;
-                
-                // Check if email already exists
-                if (db.credentials[email]) {
-                    showNotification('Email already exists!', 'error');
-                    return;
-                }
-                
-                // Create new user
-                const newUserId = `user_${Date.now()}`;
-                const newUser = {
-                    id: newUserId,
-                    name: document.getElementById('member-name').value,
-                    title: document.getElementById('member-title').value,
-                    email: email,
-                    avatar: 'https://i.ibb.co/2S8p5z3/avatar.png',
-                    department: department,
-                    role: document.getElementById('member-role').value,
-                    completedItems: [],
-                    pinnedItems: [],
-                    pathProgress: { [`onboarding_${department.toLowerCase()}`]: 0 }, // Auto-enroll in department onboarding
-                    lastLogin: null,
-                    status: 'active',
-                    joinDate: new Date().toISOString().split('T')[0]
-                };
-                
-                // Create credentials
-                const newCredentials = {
-                    email: email,
-                    passwordHash: `hashed_${password}`, // In real app, use bcrypt
-                    salt: `salt_${Date.now()}`,
-                    lastPasswordChange: new Date().toISOString().split('T')[0],
-                    failedAttempts: 0,
-                    lockedUntil: null
-                };
-                
-                // Add to database
-                db.users[newUserId] = newUser;
-                db.credentials[email] = newCredentials;
-                
-                // Reset form and close modal
-                e.target.reset();
-                hideModal('add-member-modal');
-                render();
-                showNotification('Member added successfully! Auto-enrolled in ' + department + ' onboarding.', 'success');
-            }
-            
-            function handleEditMember(e) {
-                e.preventDefault();
-                
-                const memberId = document.getElementById('edit-member-id').value;
-                const member = db.users[memberId];
-                
-                if (!member) {
-                    showNotification('Member not found!', 'error');
-                    return;
-                }
-                
-                // Update member data
-                member.name = document.getElementById('edit-member-name').value;
-                member.title = document.getElementById('edit-member-title').value;
-                member.email = document.getElementById('edit-member-email').value;
-                member.department = document.getElementById('edit-member-department').value;
-                member.role = document.getElementById('edit-member-role').value;
-                member.accessLevel = document.getElementById('edit-member-access').value;
-                member.status = document.getElementById('edit-member-status').value;
-                
-                // Update credentials if email changed
-                const oldEmail = member.email;
-                const newEmail = document.getElementById('edit-member-email').value;
-                if (oldEmail !== newEmail && db.credentials[oldEmail]) {
-                    db.credentials[newEmail] = db.credentials[oldEmail];
-                    db.credentials[newEmail].email = newEmail;
-                    delete db.credentials[oldEmail];
-                }
-                
-                // Reset form and close modal
-                e.target.reset();
-                hideModal('edit-member-modal');
-                render();
-                showNotification('Member updated successfully!', 'success');
-            }
-            
-            function handleAddCurriculumStep(e) {
-                e.preventDefault();
-                
-                const newStep = {
-                    id: Date.now(),
-                    title: document.getElementById('curriculum-title').value,
-                    type: document.getElementById('curriculum-type').value,
-                    department: document.getElementById('curriculum-department').value,
-                    author: document.getElementById('curriculum-author').value,
-                    url: document.getElementById('curriculum-url').value,
-                    description: document.getElementById('curriculum-description').value,
-                    skills: document.getElementById('curriculum-skills').value.split(',').map(s => s.trim()).filter(s => s),
-                    lastUpdated: new Date().toISOString().split('T')[0],
-                    ratings: [],
-                    comments: []
-                };
-                
-                // Add to database
-                db.items[newStep.id] = newStep;
-                
-                // Reset form and close modal
-                e.target.reset();
-                hideModal('add-curriculum-step-modal');
-                render();
-                showNotification('Curriculum step added successfully!', 'success');
-            }
-            
-                        function renderAdminDashboard() {
-                const adminContent = document.getElementById('admin-content');
-                const allUsers = Object.values(db.users).filter(u => u.role !== 'admin' && u.role !== 'creator');
-                const allItems = Object.values(db.items);
-                
-                adminContent.innerHTML = `
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- Team Overview -->
-                        <div class="lg:col-span-2">
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-xl font-bold">Team Progress Overview</h3>
-                                <button id="manage-onboarding-btn" class="bg-[var(--tnt-pink)] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#d6005b] transition-colors">
-                                    Manage Onboardings
-                                </button>
-                            </div>
-                            <div class="space-y-4">
-                                ${allUsers.map(user => `
-                                    <div class="bg-white rounded-lg p-4 border">
-                                        <div class="flex items-center justify-between mb-3">
-                                            <div class="flex items-center">
-                                                <img src="${user.avatar}" class="w-10 h-10 rounded-full mr-3">
-                <div>
-                                                    <p class="font-semibold">${user.name}</p>
-                                                    <p class="text-sm text-slate-500">${user.title} - ${user.department}</p>
-                    </div>
-                </div>
-                                            <span class="text-sm text-slate-500">${user.completedItems.length} completed</span>
-                </div>
-                                        <div class="space-y-2">
-                                            <div class="flex justify-between text-xs">
-                                                <span>Onboarding Progress</span>
-                                                <span>${getUserOnboardingProgress(user)}%</span>
-                </div>
-                                            <div class="w-full bg-slate-200 rounded-full h-2">
-                                                <div class="bg-green-500 h-2 rounded-full" style="width: ${getUserOnboardingProgress(user)}%"></div>
-                </div>
-                </div>
-                </div>
-                                `).join('')}
-        </div>
-    </div>
-
-                        <!-- Quick Stats -->
-                        <div class="space-y-4">
-                            <div class="bg-white rounded-lg p-4 border">
-                                <h4 class="font-semibold mb-3">Quick Stats</h4>
-                                <div class="space-y-2 text-sm">
-                                    <div class="flex justify-between">
-                                        <span>Total Resources</span>
-                                        <span class="font-semibold">${allItems.length}</span>
-            </div>
-                                    <div class="flex justify-between">
-                                        <span>Active Users</span>
-                                        <span class="font-semibold">${allUsers.length}</span>
-                </div>
-                                    <div class="flex justify-between">
-                                        <span>Avg. Completion</span>
-                                        <span class="font-semibold">${getAverageCompletion()}%</span>
-                </div>
-        </div>
-    </div>
-
-                            <div class="bg-white rounded-lg p-4 border">
-                                <h4 class="font-semibold mb-3">Recent Activity</h4>
-                                <div class="space-y-2 text-sm">
-                                    <div class="flex items-center">
-                                        <span data-lucide="user" class="w-4 h-4 mr-2 text-slate-400"></span>
-                                        <span>Alex completed Analytics onboarding</span>
-            </div>
-                                    <div class="flex items-center">
-                                        <span data-lucide="plus" class="w-4 h-4 mr-2 text-slate-400"></span>
-                                        <span>New Growth resource added</span>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                `;
-                lucide.createIcons();
-            }
-            
-            function getUserOnboardingProgress(user) {
-                const userOnboarding = Object.values(db.onboarding).find(o => o.department === user.department);
-                if (!userOnboarding) return 0;
-                
-                const progress = user.pathProgress[userOnboarding.id] || 0;
-                const total = userOnboarding.itemIds.length;
-                return total > 0 ? Math.round((progress / total) * 100) : 0;
-            }
-            
-            function completeOnboardingStep(userId, onboardingId, itemId) {
-                const user = db.users[userId];
-                if (!user) return false;
-                
-                const onboarding = db.onboarding[onboardingId];
-                if (!onboarding || !onboarding.itemIds.includes(itemId)) return false;
-                
-                // Add item to completed items if not already there
-                if (!user.completedItems.includes(itemId)) {
-                    user.completedItems.push(itemId);
-                }
-                
-                // Update onboarding progress
-                const currentProgress = user.pathProgress[onboardingId] || 0;
-                user.pathProgress[onboardingId] = currentProgress + 1;
-                
-                return true;
-            }
-            
-            function getAverageCompletion() {
-                const allUsers = Object.values(db.users).filter(u => u.role !== 'admin');
-                if (allUsers.length === 0) return 0;
-                
-                const totalProgress = allUsers.reduce((sum, user) => sum + getUserOnboardingProgress(user), 0);
-                return Math.round(totalProgress / allUsers.length);
-            }
-            
-            function getDaysSinceLastLogin(lastLogin) {
-                if (!lastLogin) return 'Never';
-                const lastLoginDate = new Date(lastLogin);
-                const today = new Date();
-                const diffTime = Math.abs(today - lastLoginDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                return diffDays;
-            }
-            
-            function showModal(modalId) {
-                document.getElementById(modalId).classList.remove('hidden');
-                document.getElementById(modalId).classList.add('flex');
-            }
-            
-            function hideModal(modalId) {
-                document.getElementById(modalId).classList.add('hidden');
-                document.getElementById(modalId).classList.remove('flex');
-            }
-            
-            function showNotification(message, type = 'success') {
-                // Simple notification (in real app, use a proper notification system)
-                alert(`${type.toUpperCase()}: ${message}`);
-            }
-            
-            // =================================================================================
-            // UTILITIES
-            // =================================================================================
-            function getThumbnailUrl(item) {
-                if(item.type !== 'Training') return 'https://i.ibb.co/RzVztg5/doc-placeholder.png';
-                try {
-                    const url = item.url;
-                    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                        const videoId = new URL(url).searchParams.get('v') || url.split('/').pop();
-                        return `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+                    // If no filters selected, show all
+                    if (this.filters.size === 0) {
+                        this.filters.add('all');
+                        document.querySelector('[data-filter="all"]').classList.add('active');
                     }
-                    if (url.includes('loom.com')) return `https://i.ibb.co/5Lqws19/loom-icon.png`;
-                } catch (e) {}
-                return 'https://i.ibb.co/kMcT2p9/vid-placeholder.png';
-            }
-            
-            function getEmbedUrl(url) {
-                try {
-                    if(url.includes('youtube.com') || url.includes('youtu.be')) {
-                        const videoId = new URL(url).searchParams.get('v') || url.split('/').pop();
-                        return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                    } else if (url.includes('loom.com')) {
-                        const videoId = url.split('/').pop().split('?')[0];
-                        return `https://www.loom.com/embed/${videoId}?autoplay=1`;
-                    }
-                } catch(e) { return ''; }
-                return url;
-            }
-
-            function getIconForDept(department) {
-                switch (department.toLowerCase()) {
-                    case 'dashboard': return 'layout-dashboard'; case 'analytics': return 'bar-chart-3';
-                    case 'creative': return 'palette'; case 'growth': return 'trending-up';
-                    case 'learning paths': return 'git-merge'; default: return 'file-text';
                 }
+                
+                this.applyFilters();
             }
             
-            // =================================================================================
-            // INITIALIZATION
-            // =================================================================================
-            function initializeApp() {
-                // Initialize Lucide icons
-                lucide.createIcons();
-                
-                // Setup event listeners
-                setupEventListeners();
-                
-                // Debug: Verify current titles
-                console.log('Current team titles:');
-                Object.values(db.users).forEach(user => {
-                    console.log(`${user.name}: ${user.title}`);
+            performSearch() {
+                // Highlight search terms
+                const elements = document.querySelectorAll('.resource-title, .resource-description');
+                elements.forEach(element => {
+                    const text = element.textContent;
+                    const highlightedText = text.replace(
+                        new RegExp(this.searchTerm, 'gi'),
+                        match => `<span class="search-highlight">${match}</span>`
+                    );
+                    element.innerHTML = highlightedText;
                 });
                 
-                // Render initial view
-                render();
+                // Show notification
+                this.showNotification('Search completed', 'Found 12 matching resources');
             }
             
-            // --- INITIALIZE APP ---
-            initializeApp();
-        });
+            applyFilters() {
+                // Apply current filters to resources
+                console.log('Applying filters:', Array.from(this.filters));
+            }
+            
+            navigateToDepartment(department) {
+                this.currentSection = department;
+                this.updateBreadcrumb(department);
+                this.loadDepartmentContent(department);
+            }
+            
+            updateBreadcrumb(section) {
+                const breadcrumb = document.getElementById('breadcrumb');
+                const currentSection = document.getElementById('current-section');
+                
+                currentSection.textContent = section;
+                
+                // Add breadcrumb item
+                const newItem = document.createElement('a');
+                newItem.href = '#';
+                newItem.textContent = section;
+                newItem.dataset.section = section;
+                
+                breadcrumb.appendChild(document.createElement('span'));
+                breadcrumb.appendChild(newItem);
+            }
+            
+            loadDepartmentContent(department) {
+                // Load department-specific content
+                console.log(`Loading content for ${department}`);
+            }
+            
+            loadUserData() {
+                // Simulate loading user data
+                document.getElementById('user-name').textContent = 'Welcome, Adam Treboutat';
+                document.getElementById('user-role').textContent = 'Role: COO';
+            }
+            
+            showNotification(title, message) {
+                const toast = document.getElementById('notification-toast');
+                toast.querySelector('p').textContent = title;
+                toast.querySelector('.text-xs').textContent = message;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 5000);
+            }
+        }
+        
+        // Initialize the enterprise training hub
+        const hub = new TNTTrainingHub();
+        
+        // Simulate loading states
+        setTimeout(() => {
+            document.querySelectorAll('.loading-skeleton').forEach(element => {
+                element.classList.remove('loading-skeleton');
+            });
+        }, 2000);
     </script>
 </body>
-</html>
+</html> 
